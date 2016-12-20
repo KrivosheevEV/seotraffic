@@ -8,8 +8,8 @@ public class main {
     {
 //        mSecondThread = new StartThread();	//Создание потока
         new StartThread().start();	//Создание потока
-        new StartThread().start();	//Создание потока
-        new StartThread().start();	//Создание потока
+//        new StartThread().start();	//Создание потока
+//        new StartThread().start();	//Создание потока
 //        new StartThread().start();	//Создание потока
 
         System.out.println("Главный поток завершён...");
