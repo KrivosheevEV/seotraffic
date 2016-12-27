@@ -24,29 +24,41 @@ import static sun.net.www.protocol.http.HttpURLConnection.userAgent;
 public class StartThread extends Thread {
     private static HtmlUnitDriver driver_noGUI;
     private static WebDriver driver;
-    private static ArrayList<String> listProxy;
     private static boolean USE_GUI = true;
+    private String givenURL, givenProxy;
+    private Boolean itsLastTread;
+
+    StartThread(String givenURL, String givenProxy, Boolean itsLastTread){
+        this.givenURL = givenURL;
+        this.givenProxy = givenProxy;
+        this.itsLastTread = itsLastTread;
+    }
 
     @Override
     public void run()    //Этот метод будет выполнен в побочном потоке
     {
-        listProxy = new ArrayList<String>();
-        String url_1 = "https://yandex.ru/search/?msid=1482176371.93869.22866.28043&text=%D1%86%D0%B5%D0%BD%D1%8B%D0%BA%D0%BE%D0%BD%D0%BA%D1%83%D1%80%D0%B5%D0%BD%D1%82%D0%BE%D0%B2.%D1%80%D1%84&lr=213";
-//            startingWebDriver("xn--b1afataqbcfet0aj9a7e.xn--p1ai");
-        startingWebDriver(url_1);
+        startingWebDriver(givenURL, givenProxy);
         List<WebElement> listLinks;
-        listLinks = driver.findElements(By.cssSelector("a.link.organic__url.link.link_cropped_no"));
-        if (listLinks.size() > 0) listLinks.get(0).click();
-        driver.close();
-        driver.quit();
-        System.out.println("Привет из побочного потока!");
+        try {
+            listLinks = driver.findElements(By.cssSelector("a.link.organic__url.link.link_cropped_no"));
+            if (listLinks.size() > 0) listLinks.get(0).click();
+        } catch (Exception e) {/**/}
+//        driver.manage().window().maximize();
+        main.addToResultString(driver.getWindowHandle());
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//        driver.close();
+//        if (itsLastTread)
+            driver.close(); driver.quit();
+        main.addToResultString("Привет из побочного потока!");
 
     }
 
     // Start new WebDriver.
-    private static void startingWebDriver(String givenURL) {
-
-        String proxyString = getRandomProxy();
+    private static void startingWebDriver(String givenURL, String proxyString) {
 
         FirefoxProfile profile = new FirefoxProfile();
         profile.setPreference("browser.download.manager.alertOnEXEOpen", false);
@@ -99,79 +111,7 @@ public class StartThread extends Thread {
         }
     }
 
-    private static String getRandomProxy() {
 
-        String resultString, stringOfProxies;
-        String pathOfProxyFile = "/home/vnc/Public/proxyList.txt";
-        listProxy = readFromProxyFile(pathOfProxyFile);
-
-//            if (!PROP_PROXY.equalsIgnoreCase("FOXTOOLS")) return "";
-        if (listProxy.isEmpty()) {
-            GetPost getHtmlData = new GetPost();
-            try {
-                stringOfProxies = getHtmlData.sendGet("http://api.foxtools.ru/v2/Proxy.txt?cp=UTF-8&lang=RU&type=HTTPS&available=Yes&free=Yes&limit=10&uptime=2&country=RU");
-            } catch (Exception e) {
-                return "";
-            }
-            if (!stringOfProxies.isEmpty()) {
-                for (String proxyAddress : stringOfProxies.split(";")
-                        ) {
-                    listProxy.add(proxyAddress);
-                }
-                listProxy.remove(0);
-            }
-        }
-        Random r = new Random();
-        int i = r.nextInt(listProxy.size() - 1);
-        resultString = listProxy.get(i);
-        listProxy.remove(i);
-
-        writeToProxyFile(listProxy, pathOfProxyFile);
-
-        return resultString;
-    }
-
-    private static void writeToProxyFile(ArrayList<String> givenProxyList, String givenProxyFileName) {
-
-        try {
-            OutputStream f = new FileOutputStream(givenProxyFileName, true);
-            OutputStreamWriter writer = new OutputStreamWriter(f);
-            BufferedWriter out = new BufferedWriter(writer);
-            for (String proxyAddress : givenProxyList) {
-                out.write(proxyAddress);
-                out.flush();
-            }
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
-    }
-
-    private static ArrayList<String> readFromProxyFile(String givenProxyFileName) {
-
-        ArrayList<String> listOfProxy = new ArrayList<String>();
-
-        File f = new File(givenProxyFileName);
-        if(!f.exists()) return listOfProxy;
-
-        FileInputStream fstream = null;
-
-        try
-        {
-            fstream = new FileInputStream(givenProxyFileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-            String strLine = "";
-            while ((strLine = br.readLine()) != null)   {
-                listOfProxy.add(strLine);
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            try { fstream.close(); } catch ( Exception ignore ) {}
-        }
-        return listOfProxy;
-    }
 }
 
 

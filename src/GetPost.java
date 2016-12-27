@@ -17,10 +17,10 @@ public class GetPost {
 
         GetPost http = new GetPost();
 
-        System.out.println("Testing 1 - Send Http GET request");
+        main.addToResultString("Testing 1 - Send Http GET request");
 //        http.sendGet();
 
-        System.out.println("\nTesting 2 - Send Http POST request");
+        main.addToResultString("\nTesting 2 - Send Http POST request");
         http.sendPost();
 
     }
@@ -38,8 +38,8 @@ public class GetPost {
         con.setRequestProperty("User-Agent", USER_AGENT);
 
         int responseCode = con.getResponseCode();
-        System.out.println("\nSending 'GET' request to URL : " + givetURL);
-        System.out.println("Response Code : " + responseCode);
+//        System.out.println("\nSending 'GET' request to URL : " + givetURL);
+        main.addToResultString("Response Code : " + responseCode);
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));

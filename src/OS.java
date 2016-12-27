@@ -1,0 +1,4 @@
+enum OS {
+    Windows, Linux;
+}
+
