@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -39,6 +40,7 @@ public class StartTask {
     public void start(String givenURL, String givenProxy)    //Этот метод будет выполнен в побочном потоке
     {
         startingWebDriver(givenURL, givenProxy);
+        if(driver==null) return;
         driver.manage().window().maximize();
         List<WebElement> listLinks;
         Random r = new Random();
@@ -49,39 +51,51 @@ public class StartTask {
                 driver.switchTo().window(String.valueOf(driver.getWindowHandles().toArray()[1]));
                 Thread.sleep(2000);
                 try {
-                    (new WebDriverWait(driver, 250, 2))
+                    (new WebDriverWait(driver, 310, 2))
                             .until(ExpectedConditions.visibilityOfElementLocated(By.id("fh5co-clients")));
-
+                    int delay1 = r.nextInt(15000);
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-clients")));
-                    Thread.sleep(r.nextInt(5000));
+                    Thread.sleep(delay1);
+                    int delay2 = r.nextInt(15000);
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-features-3")));
-                    Thread.sleep(r.nextInt(5000));
+                    Thread.sleep(delay2);
+                    int delay3 = r.nextInt(15000);
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-features-2")));
-                    Thread.sleep(r.nextInt(5000));
+                    Thread.sleep(delay3);
+                    int delay4 = r.nextInt(15000);
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-features")));
-                    Thread.sleep(r.nextInt(5000));
+                    Thread.sleep(delay4);
+                    int delay5 = r.nextInt(15000);
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-pricing")));
-                    Thread.sleep(r.nextInt(5000));
+                    Thread.sleep(delay5);
+                    int delay6 = r.nextInt(15000);
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-faqs")));
-                    Thread.sleep(r.nextInt(5000));
+                    Thread.sleep(delay6);
+                    int delay7 = 0;
                     for (WebElement we : driver.findElements(By.cssSelector("div.faq-accordion.to-animate.fadeInUp.animated h3"))
                             ) {
                         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
 //                    we.click();
-                        Thread.sleep(r.nextInt(5000));
+                        int d = r.nextInt(10000);
+                        delay7 = delay7+d;
+                        Thread.sleep(d);
                     }
+                    main.addToResultString("Elements for scrolling reading for ".concat(String.valueOf((delay1+delay2+delay3+delay4+delay5+delay6+delay7)/1000)).concat("+ seconds."));
                 } catch (Exception e) {
                     main.addToResultString("Elements for scrolling NOT found.");
                 }
                 ++main.countSuccess;
             }
         } catch (Exception e) {
+            main.addToResultString(e.getMessage());
             e.printStackTrace();
         }
         main.addToResultString(getElaspedTime().concat(" -> Iteration: ").concat(String.valueOf(main.countIteration)).concat(", Success: ").concat(String.valueOf(main.countSuccess)).concat(", Proxy: ").concat(String.valueOf(givenProxy)));
-        driver.close(); driver.quit();
+        try {
+            driver.close();
+            driver.quit();
+        } catch(Exception e) {main.addToResultString("Driver not found! (".concat(getElaspedTime()).concat(")"));};
 //        System.out.println("Привет из побочного потока!");
-
     }
 
     // Start new WebDriver.
@@ -118,12 +132,13 @@ public class StartTask {
                 if (driver_noGUI != null) driver_noGUI.quit();
 //                    addToResultString("Trying start new FirefoxDriver", addTo.LogFileAndConsole);
                 driver = new FirefoxDriver(profile);
+//                driver = new ChromeDriver(profile);
                 driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
-                driver.manage().timeouts().pageLoadTimeout(125000, TimeUnit.MILLISECONDS);
+                driver.manage().timeouts().pageLoadTimeout(185000, TimeUnit.MILLISECONDS);
                 try {
                     if (!givenURL.isEmpty()) driver.get(givenURL);
                 } catch(org.openqa.selenium.TimeoutException te){
-                    main.addToResultString("!! Timeout 125 sec.");
+                    main.addToResultString("!! Timeout 185 sec.");
                     ((JavascriptExecutor)driver).executeScript("window.stop();");
                 }
             } else {
@@ -134,11 +149,14 @@ public class StartTask {
                 driver_noGUI.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
 //                driver_noGUI.setJavascriptEnabled(true);
                 if (!givenURL.isEmpty()) driver_noGUI.get(givenURL);
-
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            if(USE_GUI) driver = null;
+            else driver_noGUI = null;
+            main.addToResultString(e.getMessage());
+//            e.printStackTrace();
+            System.out.println(e.getMessage());
 //                addToResultString(e.toString(), addTo.LogFileAndConsole);
 //            return;
         }

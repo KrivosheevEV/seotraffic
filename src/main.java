@@ -61,14 +61,15 @@ public class main {
         if (listProxy.isEmpty()) {
             GetPost getHtmlData = new GetPost();
             try {
-                stringOfProxies = getHtmlData.sendGet("http://api.foxtools.ru/v2/Proxy.txt?cp=UTF-8&lang=&anonymity=All&type=None&available=Yes&free=Yes&limit=100&uptime=15&country=RU");
+//                stringOfProxies = getHtmlData.sendGet("http://api.foxtools.ru/v2/Proxy.txt?cp=UTF-8&lang=&anonymity=All&type=None&available=Yes&free=Yes&limit=100&uptime=15&country=RU");
+                stringOfProxies = getHtmlData.sendGet("http://proxymir.com/get2.txt?key=DmMINswuievU3XoDK9l3mDDKuM6RCFt&type=http&level=elite,anonymous&country=all&servis=all&count=0");
             } catch (Exception e) {
                 return "";
             }
             if (!stringOfProxies.isEmpty()) {
                 for (String proxyAddress : stringOfProxies.split(";")
                         ) {
-                    listProxy.add(proxyAddress);
+                    if (!proxyAddress.trim().isEmpty())listProxy.add(proxyAddress);
                 }
                 listProxy.remove(0);
             }
@@ -107,6 +108,7 @@ public class main {
                 }
             }
         } catch (IOException ex) {
+            main.addToResultString(ex.getMessage());
             System.err.println(ex);
         }
     }
@@ -130,6 +132,7 @@ public class main {
             }
         }
         catch (IOException e) {
+            main.addToResultString(e.getMessage());
             e.printStackTrace();
         }
         finally {
@@ -179,6 +182,7 @@ public class main {
                 logFile.createNewFile();
             } catch (IOException e) {
                 System.out.println("Can't create file.");
+                System.out.println(e.getMessage());
                 e.printStackTrace();
             }
         }
