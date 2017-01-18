@@ -43,6 +43,7 @@ public class StartTask {
         if(driver==null) return;
         driver.manage().window().maximize();
         List<WebElement> listLinks;
+        List<WebElement> listHrefs;
         Random r = new Random();
         try {
             listLinks = driver.findElements(By.cssSelector("a.link.organic__url.link.link_cropped_no"));
@@ -80,11 +81,24 @@ public class StartTask {
                         delay7 = delay7+d;
                         Thread.sleep(d);
                     }
-                    main.addToResultString("Elements for scrolling reading for ".concat(String.valueOf((delay1+delay2+delay3+delay4+delay5+delay6+delay7)/1000)).concat("+ seconds."));
+
+                    listHrefs = driver.findElements(By.tagName("a"));
+                    if (listHrefs.size()>23) listHrefs.get(23).click();
+                    else if (listHrefs.size()>0) listHrefs.get(1).click();
+                    Thread.sleep(r.nextInt(15000));
+
+                    ++main.countSuccess;
+                    int delayTime = (delay1+delay2+delay3+delay4+delay5+delay6+delay7)/1000;
+                    String delayTimeString = "";
+                    if (delayTime<60) {
+                        delayTimeString = "00:".concat(String.format("%02d", delayTime));
+                    }else {
+                        delayTimeString = String.format("%02d", delayTime / 60 % 60).concat(":").concat(String.format("%02d", delayTime % 60));
+                    }
+                    main.addToResultString("Elements for scrolling reading for ".concat(delayTimeString).concat(" minutes."));
                 } catch (Exception e) {
                     main.addToResultString("Elements for scrolling NOT found.");
                 }
-                ++main.countSuccess;
             }
         } catch (Exception e) {
             main.addToResultString(e.getMessage());
