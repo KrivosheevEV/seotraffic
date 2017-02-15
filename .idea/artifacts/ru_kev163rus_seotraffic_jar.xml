@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact name="ru.kev163rus.seotraffic:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ru_kev163rus_seotraffic_jar</output-path>
+    <root id="root">
+      <element id="archive" name="ru.kev163rus.seotraffic.jar">
+        <element id="module-output" name="ru.kev163rus.seotraffic" />
+      </element>
+      <element id="library" level="project" name="org.seleniumhq.selenium:selenium-server:2.52.0" />
+    </root>
+  </artifact>
+</component>

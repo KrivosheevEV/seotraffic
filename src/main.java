@@ -16,7 +16,7 @@ public class main {
     public static int countSuccess = 0;
     private static String textOfLog = "", logFilePath;
     public static long startTime;
-    public static boolean USE_PROXY = false;
+    public static boolean USE_PROXY = true;
 
     static OS currentOS = OS.Linux;
 
@@ -30,6 +30,7 @@ public class main {
         // http://ценыконкурентов.рф/
 //        String generalURL = "https://yandex.ru/search/?msid=1482176371.93869.22866.28043&text=%D1%86%D0%B5%D0%BD%D1%8B%D0%BA%D0%BE%D0%BD%D0%BA%D1%83%D1%80%D0%B5%D0%BD%D1%82%D0%BE%D0%B2.%D1%80%D1%84&lr=213";
         String generalURL = "https://yandex.ru/search/?lr=90&msid=1482652454.05074.22877.5047&text=%D1%86%D0%B5%D0%BD%D1%8B%20%D0%BA%D0%BE%D0%BD%D0%BA%D1%83%D1%80%D0%B5%D0%BD%D1%82%D0%BE%D0%B2%20%D1%80%D1%84&vkbd=1";
+//        String generalURL = "http://pestravka.frontime.ru";
         startTime = System.currentTimeMillis();
 
 //            new StartThread(generalURL, proxy, countIteration >= countTreads).start();
@@ -63,7 +64,7 @@ public class main {
             GetPost getHtmlData = new GetPost();
             try {
 //                stringOfProxies = getHtmlData.sendGet("http://api.foxtools.ru/v2/Proxy.txt?cp=UTF-8&lang=&anonymity=All&type=None&available=Yes&free=Yes&limit=100&uptime=15&country=RU");
-                stringOfProxies = getHtmlData.sendGet("http://proxymir.com/get2.txt?key=DmMINswuievU3XoDK9l3mDDKuM6RCFt&type=http&level=elite,anonymous&country=RU&servis=all&count=0");
+                stringOfProxies = getHtmlData.sendGet("http://proxymir.com/get2.txt?key=g8tYxbG5A702Pcv51bmlIEg58FMuS5a&type=http&level=elite,anonymous&country=RU&servis=yandex&count=0");
             } catch (Exception e) {
                 return "";
             }
@@ -169,7 +170,8 @@ public class main {
 
         String dateToName = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
         String fileName_Result = "Result_SeoTraffic_".concat(dateToName).concat(".txt");
-        String fullPathOfLogs = getCurrentPath() + "logs".concat(currentOS == OS.Windows ? "\\" : "/").concat(fileName_Result);
+//        String fullPathOfLogs = getCurrentPath() + "logs".concat(currentOS == OS.Windows ? "\\" : "/").concat(fileName_Result);
+        String fullPathOfLogs = "/usr/develop/seotraffic/logs".concat(currentOS == OS.Windows ? "\\" : "/").concat(fileName_Result);
 
         File logFile = new File(fullPathOfLogs);
 

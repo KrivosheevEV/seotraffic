@@ -1,9 +1,6 @@
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -13,7 +10,9 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -41,72 +40,107 @@ public class StartTask {
     {
         startingWebDriver(givenURL, givenProxy);
         if(driver==null) return;
-        driver.manage().window().maximize();
+        driver.manage().window().setSize(new Dimension(500, 300));
+        driver.manage().window().setPosition(new Point(100, 100));
         List<WebElement> listLinks;
         List<WebElement> listHrefs;
         Random r = new Random();
         try {
             listLinks = driver.findElements(By.cssSelector("a.link.organic__url.link.link_cropped_no"));
             if (listLinks.size() > 0) {
-                listLinks.get(0).click();
+                listLinks.get(0).sendKeys(Keys.ENTER);
+//                listLinks.get(0).click();
                 driver.switchTo().window(String.valueOf(driver.getWindowHandles().toArray()[1]));
-                Thread.sleep(2000);
+                driver.manage().window().setPosition(new Point(200, 200));
+                Thread.sleep(3000);
                 try {
-                    (new WebDriverWait(driver, 310, 2))
-                            .until(ExpectedConditions.visibilityOfElementLocated(By.id("fh5co-clients")));
-                    int delay1 = r.nextInt(15000);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-clients")));
-                    Thread.sleep(delay1);
-                    int delay2 = r.nextInt(15000);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-features-3")));
-                    Thread.sleep(delay2);
-                    int delay3 = r.nextInt(15000);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-features-2")));
-                    Thread.sleep(delay3);
-                    int delay4 = r.nextInt(15000);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-features")));
-                    Thread.sleep(delay4);
-                    int delay5 = r.nextInt(15000);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-pricing")));
-                    Thread.sleep(delay5);
-                    int delay6 = r.nextInt(15000);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("fh5co-faqs")));
-                    Thread.sleep(delay6);
-                    int delay7 = 0;
-                    for (WebElement we : driver.findElements(By.cssSelector("div.faq-accordion.to-animate.fadeInUp.animated h3"))
-                            ) {
-                        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
+                    if (Objects.equals(driver.getTitle(), "ЦеныКонкурентов.рф — Сбор любой аналитики с интернет-сайтов")) {
+                        (new WebDriverWait(driver, 310, 2)).until(ExpectedConditions.visibilityOfElementLocated(By.id("fh5co-clients")));
+//                    (new WebDriverWait(driver, 310, 2)).until(ExpectedConditions.visibilityOfElementLocated(By.id("fh5co-features-3")));
+//                    (new WebDriverWait(driver, 310, 2)).until(ExpectedConditions.visibilityOfElementLocated(By.id("fh5co-features-2")));
+//                    (new WebDriverWait(driver, 310, 2)).until(ExpectedConditions.visibilityOfElementLocated(By.id("fh5co-features")));
+//                    (new WebDriverWait(driver, 310, 2)).until(ExpectedConditions.visibilityOfElementLocated(By.id("fh5co-pricing")));
+//                    (new WebDriverWait(driver, 310, 2)).until(ExpectedConditions.visibilityOfElementLocated(By.id("fh5co-faqs")));
+
+                        int delay1 = r.nextInt(15000);
+                        int delay2 = r.nextInt(15000);
+                        int delay3 = r.nextInt(15000);
+                        int delay4 = r.nextInt(15000);
+                        int delay5 = r.nextInt(15000);
+                        int delay6 = r.nextInt(15000);
+
+                        try {
+                            WebElement we = driver.findElement(By.id("fh5co-clients"));
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
+                            Thread.sleep(delay1);
+                        } catch (Exception e) {/**/}
+                        try {
+                            WebElement we = driver.findElement(By.id("fh5co-features-3"));
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
+                            Thread.sleep(delay2);
+                        } catch (Exception e) {/**/}
+                        try {
+                            WebElement we = driver.findElement(By.id("h5co-features-2"));
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
+                            Thread.sleep(delay3);
+                        } catch (Exception e) {/**/}
+                        try {
+                            WebElement we = driver.findElement(By.id("fh5co-features"));
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
+                            Thread.sleep(delay4);
+                        } catch (Exception e) {/**/}
+                        try {
+                            WebElement we = driver.findElement(By.id("fh5co-pricing"));
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
+                            Thread.sleep(delay5);
+                        } catch (Exception e) {/**/}
+                        try {
+                            WebElement we = driver.findElement(By.id("fh5co-faqs"));
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
+                            Thread.sleep(delay6);
+                        } catch (Exception e) {/**/}
+
+                        int delay7 = 0;
+                        try {
+                            for (WebElement we : driver.findElements(By.cssSelector("div.faq-accordion.to-animate.fadeInUp.animated h3"))
+                                    ) {
+                                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
 //                    we.click();
-                        int d = r.nextInt(10000);
-                        delay7 = delay7+d;
-                        Thread.sleep(d);
-                    }
+                                int d = r.nextInt(10000);
+                                delay7 = delay7 + d;
+                                Thread.sleep(d);
+                            }
 
-                    listHrefs = driver.findElements(By.tagName("a"));
-                    if (listHrefs.size()>23) listHrefs.get(23).click();
-                    else if (listHrefs.size()>0) listHrefs.get(1).click();
-                    Thread.sleep(r.nextInt(15000));
+                        } catch (Exception e) {/**/}
 
-                    ++main.countSuccess;
-                    int delayTime = (delay1+delay2+delay3+delay4+delay5+delay6+delay7)/1000;
-                    String delayTimeString = "";
-                    if (delayTime<60) {
-                        delayTimeString = "00:".concat(String.format("%02d", delayTime));
-                    }else {
-                        delayTimeString = String.format("%02d", delayTime / 60 % 60).concat(":").concat(String.format("%02d", delayTime % 60));
+                        try {
+                            listHrefs = driver.findElements(By.tagName("a"));
+                            if (listHrefs.size() > 23) listHrefs.get(23).sendKeys(Keys.ENTER);
+                            else if (listHrefs.size() > 0) listHrefs.get(1).sendKeys(Keys.ENTER);
+                            Thread.sleep(r.nextInt(15000));
+                        } catch (Exception e) {/**/}
+
+                        ++main.countSuccess;
+                        int delayTime = (delay1 + delay2 + delay3 + delay4 + delay5 + delay6 + delay7) / 1000;
+                        String delayTimeString = "";
+                        if (delayTime < 60) {
+                            delayTimeString = "00:".concat(String.format("%02d", delayTime));
+                        } else {
+                            delayTimeString = String.format("%02d", delayTime / 60 % 60).concat(":").concat(String.format("%02d", delayTime % 60));
+                        }
+                        main.addToResultString("Elements for scrolling reading for ".concat(delayTimeString).concat(" minutes."));
                     }
-                    main.addToResultString("Elements for scrolling reading for ".concat(delayTimeString).concat(" minutes."));
                 } catch (Exception e) {
                     main.addToResultString("Elements for scrolling NOT found.");
                 }
             }
         } catch (Exception e) {
             main.addToResultString(e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         main.addToResultString(getElaspedTime().concat(" -> Iteration: ").concat(String.valueOf(main.countIteration)).concat(", Success: ").concat(String.valueOf(main.countSuccess)).concat(", Proxy: ").concat(String.valueOf(givenProxy)));
         try {
-            driver.close();
+//            driver.close();
             driver.quit();
         } catch(Exception e) {main.addToResultString("Driver not found! (".concat(getElaspedTime()).concat(")"));};
 //        System.out.println("Привет из побочного потока!");
@@ -147,13 +181,19 @@ public class StartTask {
 //                    addToResultString("Trying start new FirefoxDriver", addTo.LogFileAndConsole);
                 driver = new FirefoxDriver(profile);
 //                driver = new ChromeDriver(profile);
-                driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
-                driver.manage().timeouts().pageLoadTimeout(185000, TimeUnit.MILLISECONDS);
+                driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+                driver.manage().timeouts().pageLoadTimeout(3, TimeUnit.MINUTES);
+                driver.manage().timeouts().setScriptTimeout(1, TimeUnit.MINUTES);
                 try {
                     if (!givenURL.isEmpty()) driver.get(givenURL);
                 } catch(org.openqa.selenium.TimeoutException te){
-                    main.addToResultString("!! Timeout 185 sec.");
-                    ((JavascriptExecutor)driver).executeScript("window.stop();");
+                    main.addToResultString("!! Timeout 2 min.");
+                    try {
+                        ((JavascriptExecutor)driver).executeScript("window.stop();");
+                    }catch (Exception e) {
+                        main.addToResultString("Error runnig closing script.");
+                    }
+
                 }
             } else {
                 if (driver != null) driver.quit();
@@ -184,7 +224,8 @@ public class StartTask {
         String minutsElapse = String.format("%02d", elapsedTime / 60 % 60);
         String hoursElapse = String.format("%02d", elapsedTime / 3600 % 24);
         String daysElapse = String.format("%02d", elapsedTime / (3600 * 24));
-        return daysElapse.concat(",").concat(hoursElapse).concat(":").concat(minutsElapse).concat(":").concat(secondsElapse);
+        String currentTime = new SimpleDateFormat("HH:mm").format(currentMilliseconds);
+        return daysElapse.concat(",").concat(hoursElapse).concat(":").concat(minutsElapse).concat(":").concat(secondsElapse).concat("(").concat(currentTime).concat(")");
     }
 
 
