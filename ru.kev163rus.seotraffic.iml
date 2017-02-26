@@ -6,10 +6,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/META-INF" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/out" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/logs" />
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="org.seleniumhq.selenium:selenium-server:2.52.0" level="project" />
+    <orderEntry type="library" exported="" name="org.seleniumhq.selenium:selenium-server:2.52.0" level="project" />
   </component>
 </module>

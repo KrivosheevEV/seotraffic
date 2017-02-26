@@ -39,16 +39,77 @@ public class StartTask {
     public void start(String givenURL, String givenProxy)    //Этот метод будет выполнен в побочном потоке
     {
         startingWebDriver(givenURL, givenProxy);
-        if(driver==null) return;
-        driver.manage().window().setSize(new Dimension(500, 300));
-        driver.manage().window().setPosition(new Point(100, 100));
+        try {
+            if(driver==null) return;
+            driver.manage().window().setSize(new Dimension(500, 300));
+            driver.manage().window().setPosition(new Point(100, 100));
+        }catch (Exception e) {
+            return;
+        }
         List<WebElement> listLinks;
         List<WebElement> listHrefs;
         Random r = new Random();
         try {
-            listLinks = driver.findElements(By.cssSelector("a.link.organic__url.link.link_cropped_no"));
-            if (listLinks.size() > 0) {
-                listLinks.get(0).sendKeys(Keys.ENTER);
+            if (driver.getTitle().equals("Ой!")){
+                main.addToResultString(getElaspedTime().concat(" -> 'Ой!' page (("));
+                main.addToResultString(getElaspedTime().concat(" -> Iteration: ").concat(String.valueOf(main.countIteration)).concat(", Success: ").concat(String.valueOf(main.countSuccess)).concat(", Proxy: ").concat(String.valueOf(givenProxy)));
+                driver.quit();
+                return;
+            }
+            if (driver.getTitle().equals("Problem loading page")){
+                main.addToResultString(getElaspedTime().concat(" -> 'Problem loading page' page (("));
+                main.addToResultString(getElaspedTime().concat(" -> Iteration: ").concat(String.valueOf(main.countIteration)).concat(", Success: ").concat(String.valueOf(main.countSuccess)).concat(", Proxy: ").concat(String.valueOf(givenProxy)));
+                driver.quit();
+                return;
+            }
+            if (driver.getTitle().equals("403")){
+                main.addToResultString(getElaspedTime().concat(" -> '403' page (("));
+                main.addToResultString(getElaspedTime().concat(" -> Iteration: ").concat(String.valueOf(main.countIteration)).concat(", Success: ").concat(String.valueOf(main.countSuccess)).concat(", Proxy: ").concat(String.valueOf(givenProxy)));
+                driver.quit();
+                return;
+            }
+//            listLinks = driver.findElements(By.cssSelector("a.link.organic__url.link.link_cropped_no"));
+            listLinks = driver.findElements(By.cssSelector("a.link.link_outer_yes.path__item"));
+            Boolean siteFounded = false;
+
+            for (WebElement we: listLinks
+                    ) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
+                if (we.getAttribute("href").equals("http://ценыконкурентов.рф/")){
+                    we.sendKeys(Keys.ENTER);
+                    siteFounded = true;
+                    break;
+                }
+            }
+
+            if (!siteFounded){
+                for (int i = 0; i < 20; i++) {
+                    List<WebElement> nextPageLinks = driver.findElements(By.cssSelector("a.link.link_ajax_yes.pager__item.pager__item_kind_next.i-bem"));
+                    for (WebElement we: nextPageLinks
+                         ) {
+                        if (we.getText().equals("дальше")) {
+                            we.sendKeys(Keys.ENTER);
+                            Thread.sleep(3000);
+                        }
+                    }
+                    listLinks = driver.findElements(By.cssSelector("a.link.link_outer_yes.path__item"));
+
+                    for (WebElement we: listLinks
+                            ) {
+                        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", we);
+                        if (we.getAttribute("href").equals("http://ценыконкурентов.рф/")){
+                            we.sendKeys(Keys.ENTER);
+                            siteFounded = true;
+                            i = 20;
+                        }
+                    }
+                }
+            }
+
+            if (siteFounded) {
+
+
+//                listLinks.get(0).sendKeys(Keys.ENTER);
 //                listLinks.get(0).click();
                 driver.switchTo().window(String.valueOf(driver.getWindowHandles().toArray()[1]));
                 driver.manage().window().setPosition(new Point(200, 200));
@@ -135,7 +196,9 @@ public class StartTask {
                 }
             }
         } catch (Exception e) {
-            main.addToResultString(e.getMessage());
+            main.addToResultString(getElaspedTime().concat(" -> Some error"));
+
+//            main.addToResultString(e.getMessage());
             //e.printStackTrace();
         }
         main.addToResultString(getElaspedTime().concat(" -> Iteration: ").concat(String.valueOf(main.countIteration)).concat(", Success: ").concat(String.valueOf(main.countSuccess)).concat(", Proxy: ").concat(String.valueOf(givenProxy)));

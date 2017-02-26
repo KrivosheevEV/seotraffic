@@ -12,6 +12,7 @@ public class main {
 
     private static ArrayList<String> listProxy;
     public static int MAX_COUNT_ITERATION = 1999;
+    public static int MAX_COUNT_SUCCESS= 1000;
     public static int countIteration = 0;
     public static int countSuccess = 0;
     private static String textOfLog = "", logFilePath;
@@ -29,13 +30,15 @@ public class main {
 
         // http://ценыконкурентов.рф/
 //        String generalURL = "https://yandex.ru/search/?msid=1482176371.93869.22866.28043&text=%D1%86%D0%B5%D0%BD%D1%8B%D0%BA%D0%BE%D0%BD%D0%BA%D1%83%D1%80%D0%B5%D0%BD%D1%82%D0%BE%D0%B2.%D1%80%D1%84&lr=213";
-        String generalURL = "https://yandex.ru/search/?lr=90&msid=1482652454.05074.22877.5047&text=%D1%86%D0%B5%D0%BD%D1%8B%20%D0%BA%D0%BE%D0%BD%D0%BA%D1%83%D1%80%D0%B5%D0%BD%D1%82%D0%BE%D0%B2%20%D1%80%D1%84&vkbd=1";
+//        String generalURL = "https://yandex.ru/search/?lr=90&msid=1482652454.05074.22877.5047&text=%D1%86%D0%B5%D0%BD%D1%8B%20%D0%BA%D0%BE%D0%BD%D0%BA%D1%83%D1%80%D0%B5%D0%BD%D1%82%D0%BE%D0%B2%20%D1%80%D1%84&vkbd=1";
+        String generalURL = "https://yandex.ru/search/?text=%D1%86%D0%B5%D0%BD%D1%8B%20%D0%BA%D0%BE%D0%BD%D0%BA%D1%83%D1%80%D0%B5%D0%BD%D1%82%D0%BE%D0%B2";
 //        String generalURL = "http://pestravka.frontime.ru";
         startTime = System.currentTimeMillis();
 
 //            new StartThread(generalURL, proxy, countIteration >= countTreads).start();
         countIteration = 0;
-        while (countIteration < MAX_COUNT_ITERATION){
+//        while (countIteration < MAX_COUNT_ITERATION){
+        while (countSuccess <= MAX_COUNT_SUCCESS){
             StartTask newTask = new StartTask();
             if (USE_PROXY){
                 for (String proxy:getRandomProxy(1).split(",")
